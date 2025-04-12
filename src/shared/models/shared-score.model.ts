@@ -2,16 +2,16 @@ import { z } from 'zod';
 
 export const ScoreSchema = z.object({
   id: z.number(),
-  math: z.number().optional(),
-  literature: z.number().optional(),
-  foreignLanguage: z.number().optional(),
-  physics: z.number().optional(),
-  chemistry: z.number().optional(),
-  biology: z.number().optional(),
-  history: z.number().optional(),
-  geography: z.number().optional(),
-  civics: z.number().optional(),
-  foreignLanguageCode: z.string().optional(),
+  math: z.number().nullable(),
+  literature: z.number().nullable(),
+  foreignLanguage: z.number().nullable(),
+  physics: z.number().nullable(),
+  chemistry: z.number().nullable(),
+  biology: z.number().nullable(),
+  history: z.number().nullable(),
+  geography: z.number().nullable(),
+  civics: z.number().nullable(),
+  foreignLanguageCode: z.string().nullable(),
 });
 
 export const CsvScoreSchema = z.object({
