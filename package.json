@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "seed:score": "ts-node scripts/seed-score.ts",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -29,6 +30,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.7",
+    "nest-csv-parser": "^2.0.4",
     "nestjs-zod": "^4.3.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

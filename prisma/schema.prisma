@@ -8,15 +8,15 @@ datasource db {
 }
 
 model Score {
-  id                  Int    @id @default(autoincrement())
-  math                Float
-  literature          Float
-  foreignLanguage     Float
-  physics             Float
-  chemistry           Float
-  biology             Float
-  history             Float
-  geography           Float
-  civics              Float
-  foreignLanguageCode String
+  id                  Int     @id
+  math                Float?
+  literature          Float?
+  foreignLanguage     Float?
+  physics             Float?
+  chemistry           Float?
+  biology             Float?
+  history             Float?
+  geography           Float?
+  civics              Float?
+  foreignLanguageCode String?
 }

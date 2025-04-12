@@ -23,8 +23,7 @@ reinstall:
 	make install
 
 seed:
-	npm run seed
-	npm run seed:permission
+	npm run seed:score
 
 db-push:
 	npx prisma db push
