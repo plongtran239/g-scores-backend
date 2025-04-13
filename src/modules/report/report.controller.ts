@@ -19,4 +19,9 @@ export class ReportController {
   public async getTopGroupA() {
     return await this.reportService.getTopGroupA();
   }
+
+  @Get('dashboard')
+  public async getDashboard() {
+    return await this.reportService.getDashboard();
+  }
 }

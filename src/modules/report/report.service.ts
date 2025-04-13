@@ -1,65 +1,43 @@
 import { Injectable } from '@nestjs/common';
 
-import {
-  GetStatisticsResponseType,
-  GetTopGroupAResponseType,
-  SubjectStatisticsType,
-} from 'src/modules/report/report.model';
-import { Category, Subjects } from 'src/shared/constants';
+import { GetDashboardResponseType, GetTopGroupAResponseType } from 'src/modules/report/report.model';
 import { SharedScoreRepository } from 'src/shared/repositories/shared-score.repository';
 
 @Injectable()
 export class ReportService {
   constructor(private readonly sharedScoreRepository: SharedScoreRepository) {}
 
-  public async getStatistics(): Promise<GetStatisticsResponseType> {
-    const scores = await this.sharedScoreRepository.findAll();
+  public async getStatistics() {
+    const statistics = await this.sharedScoreRepository.statistics();
 
-    const statistics: SubjectStatisticsType[] = [];
-
-    for (const subject of Subjects) {
-      const summary = {
-        subject,
-        excellent: 0,
-        good: 0,
-        average: 0,
-        poor: 0,
-      };
-
-      for (const score of scores) {
-        const category = this.categorizeScore(score[subject]);
-
-        if (category) {
-          summary[category]++;
-        }
-      }
-
-      statistics.push(summary);
-    }
+    const formattedStatistics = statistics.map((stat) => ({
+      subject: stat.subject,
+      excellent: Number(stat.excellent),
+      good: Number(stat.good),
+      average: Number(stat.average),
+      poor: Number(stat.poor),
+    }));
 
     return {
-      subjects: statistics,
+      subjects: formattedStatistics,
     };
   }
 
   public async getTopGroupA(): Promise<GetTopGroupAResponseType> {
-    const scores = await this.sharedScoreRepository.findGroupA();
-
-    const topScores = scores.map((score) => ({
-      ...score,
-      total: (score.math as number) + (score.physics as number) + (score.chemistry as number),
-    }));
+    const topScores = await this.sharedScoreRepository.findTopGroupA();
 
     return {
-      topScores: topScores.sort((a, b) => b.total - a.total).slice(0, 10),
+      topScores,
     };
   }
 
-  private categorizeScore(score: number | null): Category | null {
-    if (score === null) return null;
-    if (score >= 8) return 'excellent';
-    if (score >= 6.5) return 'good';
-    if (score >= 5) return 'average';
-    return 'poor';
+  public async getDashboard(): Promise<GetDashboardResponseType> {
+    const data = await this.sharedScoreRepository.getDashboardStats();
+
+    return {
+      totalStudents: data.total,
+      averageScore: data.averageScore,
+      excellentStudents: data.excellentCount,
+    };
   }
 }

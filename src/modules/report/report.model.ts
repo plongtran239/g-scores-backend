@@ -27,7 +27,14 @@ export const GetTopGroupAResponseSchema = z.object({
   topScores: z.array(TopGroupASchema),
 });
 
+export const GetDashboardResponseSchema = z.object({
+  totalStudents: z.number(),
+  averageScore: z.number(),
+  excellentStudents: z.number(),
+});
+
 export type SubjectStatisticsType = z.infer<typeof SubjectStatisticsSchema>;
 export type GetStatisticsResponseType = z.infer<typeof GetStatisticsResponseSchema>;
 export type TopGroupAType = z.infer<typeof TopGroupASchema>;
 export type GetTopGroupAResponseType = z.infer<typeof GetTopGroupAResponseSchema>;
+export type GetDashboardResponseType = z.infer<typeof GetDashboardResponseSchema>;

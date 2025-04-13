@@ -33,6 +33,8 @@ export const GroupAScoreSchema = ScoreSchema.pick({
   math: true,
   physics: true,
   chemistry: true,
+}).extend({
+  total: z.number(),
 });
 
 export type ScoreType = z.infer<typeof ScoreSchema>;
