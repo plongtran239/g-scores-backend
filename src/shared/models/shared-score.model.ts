@@ -28,6 +28,15 @@ export const CsvScoreSchema = z.object({
   ma_ngoai_ngu: z.string(),
 });
 
+export const GroupAScoreSchema = ScoreSchema.pick({
+  id: true,
+  math: true,
+  physics: true,
+  chemistry: true,
+});
+
 export type ScoreType = z.infer<typeof ScoreSchema>;
 
 export type CsvScoreType = z.infer<typeof CsvScoreSchema>;
+
+export type GroupAScoreType = z.infer<typeof GroupAScoreSchema>;
