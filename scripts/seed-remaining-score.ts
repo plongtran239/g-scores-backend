@@ -17,8 +17,8 @@ const insertRemainingScores = async () => {
     throw new Error('No score found!');
   }
 
-  const batchSize = 100; // Giảm kích thước batch xuống 100,000 để tránh R15
-  const remainingScores = scores.slice(scoreCount); // Lấy phần còn lại từ 851,250
+  const batchSize = 100;
+  const remainingScores = scores.slice(scoreCount);
 
   let insertedCount = 0;
 
@@ -41,7 +41,10 @@ const insertRemainingScores = async () => {
         })),
       });
       insertedCount += batch.length;
-      console.log(`Inserted ${insertedCount} scores`);
+
+      if (insertedCount % 10000 === 0) {
+        console.log(`Inserted ${insertedCount} scores`);
+      }
     } catch (error) {
       console.error(error);
     }

@@ -4,9 +4,17 @@ bootstrap:
 	make install 
 	cp .env.example .env
 	make up
+	docker compose exec backend npx prisma migrate deploy
+	docker compose exec backend npm run seed:score
+
+dev:
+	npm run start:dev
 
 up:
-	npm run start:dev
+	docker compose up -d 
+
+down:
+	docker compose down --remove-orphans
 
 build:
 	npm run build
