@@ -22,7 +22,7 @@ const seedScore = async () => {
     }
 
     console.log('Seeding data...');
-    const batchSize = 1000;
+    const batchSize = 250;
     let insertedCount = 0;
 
     for (let i = 0; i < scores.length; i += batchSize) {
