@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: g-scores-backend
+    ports:
+      - '4000:4000'
+      - '5555:5555'
+    env_file:
+      - .env
+    depends_on:
+      - db
+    command: npm run start:dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - g-scores-network
+
+  db:
+    image: postgres:15
+    container_name: g-scores-db
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: g-scores
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - g-scores-network
+
+volumes:
+  pgdata:
+
+networks:
+  g-scores-network:
+    driver: bridge
