@@ -7,26 +7,27 @@ const cvsParserService = new CsvParserService(new CsvParser());
 const prismaService = new PrismaService();
 
 const seedScore = async () => {
-  const dataCount = await prismaService.score.count();
+  try {
+    const dataCount = await prismaService.score.count();
+    if (dataCount > 0) {
+      throw new Error('Data already exists');
+    }
 
-  if (dataCount > 0) {
-    throw new Error('Data already exists');
-  }
+    console.log('Parsing data...');
+    const scores = await cvsParserService.parseCsv('data/diem_thi_thpt_2024.csv');
+    console.log('Parsing data... done');
 
-  console.log('Parsing data...');
-  const scores = await cvsParserService.parseCsv('data/diem_thi_thpt_2024.csv');
-  console.log('Parsing data... done');
+    if (!scores || scores.length === 0) {
+      throw new Error('No score found!');
+    }
 
-  if (!scores) {
-    throw new Error('No score found!');
-  }
+    console.log('Seeding data...');
+    const batchSize = 1000;
+    let insertedCount = 0;
 
-  console.log('Seeding data...');
-
-  let insertedCount = 0;
-  for (const score of scores) {
-    await prismaService.score.create({
-      data: {
+    for (let i = 0; i < scores.length; i += batchSize) {
+      const batch = scores.slice(i, i + batchSize);
+      const batchData = batch.map((score) => ({
         id: parseInt(score.sbd),
         math: parseFloat(score.toan),
         literature: parseFloat(score.ngu_van),
@@ -38,20 +39,26 @@ const seedScore = async () => {
         geography: parseFloat(score.dia_li),
         civics: parseFloat(score.gdcd),
         foreignLanguageCode: score.ma_ngoai_ngu,
-      },
-    });
-    insertedCount++;
+      }));
 
-    if (insertedCount % 50000 === 0) {
-      console.log(`Inserted ${insertedCount} scores`);
+      await prismaService.score.createMany({
+        data: batchData,
+      });
+
+      insertedCount += batch.length;
+
+      if (insertedCount % 10000 === 0) {
+        console.log(`Inserted ${insertedCount} scores`);
+      }
     }
+
+    console.log('Seeding data... done');
+    console.log(`Total inserted: ${insertedCount} scores`);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    console.log('Process completed');
   }
-
-  console.log('Seeding data... done');
-
-  console.log(`Total inserted: ${insertedCount} scores`);
-
-  process.exit(0);
 };
 
 seedScore();
