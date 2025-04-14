@@ -32,3 +32,15 @@ docker compose exec backend npm run seed:score
 ```
 
 After that, backend will be available at [http://localhost:4000](http://localhost:4000)
+
+## 📚 Documentation & Prisma Studio
+
+You can access the documentation at [http://localhost:4000/documentation](http://localhost:4000/documentation)
+
+You can start Prisma Studio by running:
+
+```bash
+docker compose exec backend npx prisma studio
+```
+
+After that, Prisma Studio will be available at [http://localhost:5555](http://localhost:5555)
